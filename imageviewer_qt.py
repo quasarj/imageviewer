@@ -134,8 +134,8 @@ class Window(QtGui.QLabel):
         ## disabled for now, need to figure out how to return
         ## from fullscreen mode
 
-        # if event.key() == Qt.Key_F:
-        #     self.showFullScreen()
+        if event.key() == Qt.Key_F:
+            self.showFullScreen()
 
 
         # if event.key() == Qt.Key_G:
