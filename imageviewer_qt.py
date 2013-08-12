@@ -19,6 +19,7 @@ class ImageList(object):
     ]
     pos = 0 
     imglist = None
+    loop = False
 
     def __init__(self, array=None):
         if array:
@@ -43,22 +44,36 @@ class ImageList(object):
     def next(self):
         if self.pos < (len(self.imglist) - 1):
             self.pos += 1
-            return self.imglist[self.pos]
         else:
-            raise IOError("No more images in the list!")
+            if self.loop:
+                self.pos = 0
+            else:
+                raise KeyError("No more images in the list!")
+
+        return self.imglist[self.pos]
 
     def previous(self):
         if self.pos > 0:
             self.pos -= 1
-            return self.imglist[self.pos]
         else:
-            raise IOError("No fewer images in the list!")
+            if self.loop:
+                self.pos = (len(self.imglist) - 1)
+            else:
+                raise KeyError("No fewer images in the list!")
+
+        return self.imglist[self.pos]
 
     def at_end(self):
-        return self.pos >= (len(self.imglist) - 1)
+        if self.loop:
+            return False
+        else:
+            return self.pos >= (len(self.imglist) - 1)
 
     def at_beginning(self):
-        return self.pos == 0
+        if self.loop:
+            return False
+        else:
+            return self.pos == 0
 
 
 class Window(QtGui.QLabel):
@@ -70,9 +85,12 @@ class Window(QtGui.QLabel):
 
         self.image_list = ImageList()
         self.image_list.load_dir()
+        self.image_list.loop = True
 
         self.setGeometry(300, 300, 250, 150)
         self.setWindowTitle('Window')
+        self.setAlignment(Qt.AlignCenter) 
+        self.setStyleSheet("QLabel { background-color : black; color : blue; }");
 
         self.load_image(self.image_list.current())
 
