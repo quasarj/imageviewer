@@ -87,10 +87,10 @@ class Window(QtGui.QLabel):
         self.image_list.load_dir()
         self.image_list.loop = True
 
-        self.setGeometry(300, 300, 250, 150)
+        self.setGeometry(300, 300, 1000, 700)
         self.setWindowTitle('Window')
         self.setAlignment(Qt.AlignCenter) 
-        self.setStyleSheet("QLabel { background-color : black; color : blue; }");
+        self.setStyleSheet("QLabel { background-color : white; color : blue; }");
 
         self.load_image(self.image_list.current())
 
@@ -107,6 +107,9 @@ class Window(QtGui.QLabel):
         if not self.current_image:
             self.current_image = QtGui.QImage()
         self.current_image.load(filename)
+        #print self.current_image.width()
+        if self.current_image.width() > self.width():
+            self.current_image = self.current_image.scaledToWidth(self.width(),1)
         self.setPixmap(QtGui.QPixmap.fromImage(self.current_image))
 
     def keyPressEvent(self, event):
