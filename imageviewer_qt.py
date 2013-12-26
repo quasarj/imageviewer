@@ -25,6 +25,9 @@ class ImageList(object):
         if array:
             self.imglist = array
 
+            
+ 
+
     def load_dir(self, directory='.'):
         # get all files in the given dir
         files = [f for f in os.listdir(directory) if os.path.isfile(os.path.join(directory,f))]
@@ -74,6 +77,16 @@ class ImageList(object):
             return False
         else:
             return self.pos == 0
+            
+    def startAt(self, file_name):
+        f = os.path.basename(file_name)
+        for i, a in enumerate(self.imglist):
+            #print a
+            if a == f:
+                self.pos = i
+            
+        
+         
 
 
 class Window(QtGui.QLabel):
@@ -86,6 +99,11 @@ class Window(QtGui.QLabel):
         self.image_list = ImageList()
         self.image_list.load_dir()
         self.image_list.loop = True
+        
+        #print len(sys.argv)
+        #print sys.argv[1]
+        if len(sys.argv) > 1:
+             self.image_list.startAt(sys.argv[1])
 
         self.setGeometry(300, 300, 1000, 700)
         self.setWindowTitle('Window')
@@ -93,7 +111,7 @@ class Window(QtGui.QLabel):
         self.setStyleSheet("QLabel { background-color : white; color : blue; }");
 
         self.load_image(self.image_list.current())
-
+        #self.setWindowTitle(self.image_list.current())
 
     def load_image(self, filename):
         # is it a gif or other image?
