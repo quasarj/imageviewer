@@ -110,6 +110,8 @@ class Window(QtGui.QLabel):
         #print self.current_image.width()
         if self.current_image.width() > self.width():
             self.current_image = self.current_image.scaledToWidth(self.width(),1)
+        if self.current_image.width() > self.height():
+            self.current_image = self.current_image.scaledToHeight(self.height(),1)
         self.setPixmap(QtGui.QPixmap.fromImage(self.current_image))
 
     def keyPressEvent(self, event):
