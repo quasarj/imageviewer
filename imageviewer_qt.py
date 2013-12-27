@@ -16,6 +16,9 @@ class ImageList(object):
         '.jpeg',
         '.gif',
         '.bmp',
+        '.svg',
+        '.tif', #don't scale correctly
+        '.tiff', #don't scale correctly
     ]
     pos = 0 
     imglist = None
@@ -184,9 +187,10 @@ class Window(QtGui.QLabel):
         # can currently only zoom into the center
         # smooth or fast scale should eventually be a setting option
         # can be slow
+
         if self.movie() is not None: #prevents scrolling on animated gif
             return
-        if (((self.width() + (self.zoom + event.delta())) > 0) and ((self.height() + (self.zoom + event.delta())) > 0) and (self.zoom + event.delta() < 10000)):
+        if (((self.width() + (self.zoom + event.delta())) > 0) and ((self.height() + (self.zoom + event.delta())) > 0) and (self.zoom + event.delta() < 10000)): #keeps the image from getting to small or too big
             self.zoom += event.delta()
             self.load_image(self.image_list.current())
             self.current_image = self.current_image.scaledToHeight(self.height() + self.zoom,1)
