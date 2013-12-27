@@ -21,6 +21,8 @@ class ImageList(object):
     imglist = None
     loop = False
 
+
+
     def __init__(self, array=None):
         if array:
             self.imglist = array
@@ -92,6 +94,7 @@ class ImageList(object):
 class Window(QtGui.QLabel):
     current_image = None
     image_list = None
+    zoom = 0
 
     def __init__(self, parent=None):
         QtGui.QLabel.__init__(self, parent)
@@ -99,6 +102,7 @@ class Window(QtGui.QLabel):
         self.image_list = ImageList()
         self.image_list.load_dir()
         self.image_list.loop = True
+        self.zoom = 0
         
         #print len(sys.argv)
         #print sys.argv[1]
@@ -140,9 +144,11 @@ class Window(QtGui.QLabel):
             self.close()
 
         if event.key() == Qt.Key_Right:
+            self.zoom = 0
             if not self.image_list.at_end():
                 self.load_image(self.image_list.next())
-                self.setWindowTitle(self.image_list.current())
+            self.setWindowTitle(self.image_list.current())
+            
             # self.setGeometry(
             #     300,
             #     300,
@@ -151,9 +157,11 @@ class Window(QtGui.QLabel):
             # )
 
         if event.key() == Qt.Key_Left:
+            self.zoom = 0
             if not self.image_list.at_beginning():
                 self.load_image(self.image_list.previous())
-                self.setWindowTitle(self.image_list.current())
+            self.setWindowTitle(self.image_list.current())
+            
 
 
         ## disabled for now, need to figure out how to return
@@ -167,6 +175,24 @@ class Window(QtGui.QLabel):
         #     print "switching back to normal?"
         #     self.hide()
         #     self.showNormal()
+        
+        if event.key() == Qt.Key_0:
+            self.zoom = 0
+            self.load_image(self.image_list.current())
+        
+    def wheelEvent(self, event):
+        # can currently only zoom into the center
+        # smooth or fast scale should eventually be a setting option
+        # can be slow
+        if self.movie() is not None: #prevents scrolling on animated gif
+            return
+        if (((self.width() + (self.zoom + event.delta())) > 0) and ((self.height() + (self.zoom + event.delta())) > 0) and (self.zoom + event.delta() < 10000)):
+            self.zoom += event.delta()
+            self.load_image(self.image_list.current())
+            self.current_image = self.current_image.scaledToHeight(self.height() + self.zoom,1)
+            self.current_image = self.current_image.scaledToWidth(self.width() + self.zoom,1)
+            self.setPixmap(QtGui.QPixmap.fromImage(self.current_image))
+        
 
 app = QtGui.QApplication(sys.argv)
 window = Window()
