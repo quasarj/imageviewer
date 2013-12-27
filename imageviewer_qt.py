@@ -111,7 +111,7 @@ class Window(QtGui.QLabel):
         self.setStyleSheet("QLabel { background-color : white; color : blue; }");
 
         self.load_image(self.image_list.current())
-        #self.setWindowTitle(self.image_list.current())
+        self.setWindowTitle(self.image_list.current())
 
     def load_image(self, filename):
         # is it a gif or other image?
@@ -142,6 +142,7 @@ class Window(QtGui.QLabel):
         if event.key() == Qt.Key_Right:
             if not self.image_list.at_end():
                 self.load_image(self.image_list.next())
+                self.setWindowTitle(self.image_list.current())
             # self.setGeometry(
             #     300,
             #     300,
@@ -152,6 +153,7 @@ class Window(QtGui.QLabel):
         if event.key() == Qt.Key_Left:
             if not self.image_list.at_beginning():
                 self.load_image(self.image_list.previous())
+                self.setWindowTitle(self.image_list.current())
 
 
         ## disabled for now, need to figure out how to return
