@@ -172,10 +172,7 @@ class Window(QtGui.QLabel):
         if event.key() == Qt.Key_F:
             self.showFullScreen()
 
-
         if event.key() == Qt.Key_G:
-        #     print "switching back to normal?"
-        #     self.hide()
             self.showNormal()
         
         if event.key() == Qt.Key_0:
