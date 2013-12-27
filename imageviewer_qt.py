@@ -173,10 +173,10 @@ class Window(QtGui.QLabel):
             self.showFullScreen()
 
 
-        # if event.key() == Qt.Key_G:
+        if event.key() == Qt.Key_G:
         #     print "switching back to normal?"
         #     self.hide()
-        #     self.showNormal()
+            self.showNormal()
         
         if event.key() == Qt.Key_0:
             self.zoom = 0
@@ -195,7 +195,10 @@ class Window(QtGui.QLabel):
             self.current_image = self.current_image.scaledToHeight(self.height() + self.zoom,1)
             self.current_image = self.current_image.scaledToWidth(self.width() + self.zoom,1)
             self.setPixmap(QtGui.QPixmap.fromImage(self.current_image))
-        
+            
+    def resizeEvent(self, event):
+        self.zoom = 0
+        self.load_image(self.image_list.current())
 
 app = QtGui.QApplication(sys.argv)
 window = Window()
